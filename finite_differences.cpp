@@ -11,12 +11,12 @@ int main(int argc, char* argv[])
 { 
   cout << " starting reading the config file " << endl;
   string inputPath("configuration.in"); 
-  if(argc>1) // user given config ("./Exercice5 config_perso.in")
+  if(argc>1) 
     inputPath = argv[1];
 
   ConfigFile configFile(inputPath); 
 
-  for(int i(2); i<argc; ++i) // more input ("./Exercice5 config_perso.in input_scan=[valeur]")
+  for(int i(2); i<argc; ++i) 
     configFile.process(argv[i]);
 
   cout << " finished reading the potential extra arguments " << endl;
