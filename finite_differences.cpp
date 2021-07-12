@@ -68,6 +68,8 @@ int main(int argc, char* argv[])
   }
 
 
+
+
   cout << " done initializing the fields, now preparing output files " << endl;
   
   ofstream U1ofs((outputfile+"_U1.txt").c_str());
@@ -112,13 +114,13 @@ int main(int argc, char* argv[])
        J   = fh * ( Pii*Pii - Di*Di - 4*hi*fh);
 
        if(U1Forward)
-          U1tmp[i] = U1i + dt * (U1[( N+(i+1)%N ) % N] - U1i ) / dx + dt * J;
+          U1tmp[i] = U1i + dt * (U1[( N+(i+1)%N ) % N] - U1i) / dx + dt*J;
        else
-          U1tmp[i] = U1i + dt * (U1i - U1[ (N+(i-1)%N) % N]  ) / dx + dt * J;
+          U1tmp[i] = U1i + dt * (U1i - U1[ (N+(i-1)%N) % N] ) / dx + dt*J;
        if(U2Forward)
-	  U2tmp[i] = U2i + dt * (U2[( N+(i+1)%N ) % N] - U2i ) / dx - dt * J;
+	  U2tmp[i] = U2i - dt * (U2[( N+(i+1)%N ) % N] - U2i) / dx - dt*J;
        else
-          U2tmp[i] = U2i + dt * (U2i - U2[ (N+(i-1)%N) % N]  ) / dx - dt * J;
+          U2tmp[i] = U2i - dt * (U2i - U2[ (N+(i-1)%N) % N] ) / dx - dt*J;
 
        //htmp[i]  = hi + 0.5*(Pii + 0.5*(U1tmp[i]-U2tmp[i]) ) * dt;
        htmp[i]  = hi + Pii * dt;

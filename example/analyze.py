@@ -26,15 +26,15 @@ def lauchAndReturn(**kwargs):
     return t, h, ha, u1, u2, Egrad
 
 #%%
-tMax = 0.005
+tMax = 0.05
 dt   = 5e-7
-N    = 64
-eta  = 0.01/N
+N    = 256
+eta  = 0.0/N
 h0   = 0.003728643755643353
 box_size = 0.10
-amplitude = 1e-4
+amplitude = 1e-3
 tcpp, h, ha, u1, u2, Egrad = lauchAndReturn(dt=dt, 
-                                            write_every=int(2000*1e-8/dt),
+                                            write_every=int(500*1e-8/dt),
                                             eta=eta,
                                             N=N,
                                             amplitude=amplitude,
@@ -55,6 +55,9 @@ D = 0.5*(np.array(u1)+np.array(u2))
 Pi = 0.5*(np.array(u1)-np.array(u2))
 U1s = np.array(u1)
 U2s = np.array(u2)
+# h = h - np.mean(h, axis=1)[:,np.newaxis]
+U1s = U1s - np.mean(U1s, axis=1)[:,np.newaxis]
+U2s = U2s - np.mean(U2s, axis=1)[:,np.newaxis]
 fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1, sharex=True, figsize=(6,11))
 default = len(h)//2
 l1, = ax1.plot(x, h[default]); ax1.set_ylabel('h')
@@ -63,7 +66,7 @@ l3, = ax3.plot(x, Pi[default]); ax3.set_ylabel('Pi')
 l4, = ax4.plot(x, U1s[default]); ax4.set_ylabel('U1')
 l5, = ax5.plot(x, U2s[default]); ax5.set_ylabel('U2')
 try:
-    ax1.set_ylim((np.nanmin(h),np.nanmax(h)))
+    ax1.set_ylim((-0.005,0.005))
     ax2.set_ylim((np.nanmin(D),np.nanmax(D)))
     ax3.set_ylim((np.nanmin(Pi),np.nanmax(Pi)))
     ax4.set_ylim((np.nanmin(U1s),np.nanmax(U1s)))
@@ -84,6 +87,9 @@ def update(val):
     l4.set_data(x, U1s[i])
     l5.set_data(x, U2s[i])
     
+    delta = 0.00001
+    # ax1.set_ylim((np.min(h[i])-delta, np.max(h[i])+delta))
+    
     fig.canvas.draw_idle()
 
 sliderT.on_changed(update)
@@ -91,7 +97,7 @@ plt.tight_layout(rect=(0,0,1,0.98))
 plt.show()
 #"""
 #%%
-# """
+"""
 fig, (ax1, ax2) = plt.subplots(2, 1)
 for dt in [5e-6]:#np.logspace(-7, -9, 8):
     tcpp, h, ha, u1, u2, Egrad = lauchAndReturn(dt=dt, write_every=int(2000*1e-8/dt))
